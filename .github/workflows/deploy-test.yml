@@ -1,0 +1,39 @@
+name: Test-workflow
+on: push
+jobs:
+  test_job:
+    runs-on: ubuntu-latest       #no ned to install node because it is pre-installed in our runner
+    steps:
+      - name: Checkout code          # Actions-checkout is used to fetch your repository's code onto the runner machine
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:                               # with is used to configure your action eg. version of node
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+  deploy_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code          # Actions-checkout is used to fetch your repository's code onto the runner machine
+        uses: actions/checkout@v3
+
+      # - name: Set up Node.js
+      #   uses: actions/setup-node@v3                Not using node is already installed in a runner
+      #   with:
+      #     node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build project
+        run: npm run build
+      - name: Deploy
+        run: echo "Deploying...."  
+
